@@ -1,0 +1,13 @@
+language: java
+jdk: [oraclejdk8]
+before_install: 
+    - sudo chmod a+x ./travis/*.sh
+    - ./travis/before_install.sh
+install: ./travis/install.sh
+script: ./travis/script.sh
+notifications:
+  email:
+    recipients:
+      - jindra.petrik@gmail.com
+    on_success: change
+    on_failure: always

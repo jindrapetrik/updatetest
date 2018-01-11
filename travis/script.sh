@@ -1,4 +1,6 @@
 #!/bin/bash
+#stop on error
+set -e
 # If we've got website password, we can upload nightly builds.
 # Travis secure variable $website_password is not available from outside 
 # of jpexs repository (e.g pull requests from other users on GitHub)

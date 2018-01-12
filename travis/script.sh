@@ -9,8 +9,11 @@ if [ -z ${GITHUB_ACCESS_TOKEN+x} ]; then
     #...
     echo "no github access token set"
 else
-    # if no tag set
-    if [ $TRAVIS_TAG = "" ]; then
+    # if tag set
+    if [ -n "$TRAVIS_TAG" ]; then
+      # release standard version based on tag
+      echo "RELEASE standard version"
+    else
         #if we are on dev branch
         if [ $TRAVIS_BRANCH = "dev" ]; then    
           # create nightly build...
@@ -66,8 +69,5 @@ else
           TRAVIS_TAG=$TAG_NAME
           echo "FINISHED"
         fi
-    else #if tag is set
-        #release version
-        echo "RELEASE standard version"        
     fi
 fi

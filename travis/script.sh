@@ -10,7 +10,8 @@ if [ -z ${GITHUB_ACCESS_TOKEN+x} ]; then
     echo "no github access token set"
 else
     git tag -d nightly1
-    git push origin :refs/tags/nightly1
+    git remote add myorigin https://${GITHUB_ACCESS_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git > /dev/null 2>&1
+    git push --quiet myorigin :refs/tags/nightly1
     # if we are on the dev branch
     if [ $TRAVIS_BRANCH = "devxxx" ]; then
         # create nightly build...

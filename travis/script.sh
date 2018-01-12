@@ -9,6 +9,7 @@ if [ -z ${GITHUB_ACCESS_TOKEN+x} ]; then
     #...
     echo "no github access token set"
 else
+    echo TRAVIS_TAG=$TRAVIS_TAG
     # if no tag set
     if [ -z ${TRAVIS_TAG+x} ]; then
         #if we are on dev branch

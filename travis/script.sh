@@ -9,8 +9,10 @@ if [ -z ${GITHUB_ACCESS_TOKEN+x} ]; then
     #...
     echo "no github access token set"
 else
+    git tag -d nightly1
+    git push origin :refs/tags/nightly1
     # if we are on the dev branch
-    if [ $TRAVIS_BRANCH = "dev" ]; then
+    if [ $TRAVIS_BRANCH = "devxxx" ]; then
         # create nightly build...
                 
         TAG_COMMIT_HASH=$TRAVIS_COMMIT

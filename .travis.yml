@@ -1,13 +1,22 @@
 language: java
-jdk: [oraclejdk8]
-before_install: 
-    - sudo chmod a+x ./travis/*.sh
-    - ./travis/before_install.sh
-install: ./travis/install.sh
-script: ./travis/script.sh
+jdk:
+- oraclejdk8
+before_install:
+- sudo chmod a+x ./travis/*.sh
+- "./travis/before_install.sh"
+install: "./travis/install.sh"
+script: "./travis/script.sh"
 notifications:
   email:
     recipients:
-      - jindra.petrik@gmail.com
+    - jindra.petrik@gmail.com
     on_success: change
     on_failure: always
+deploy:
+  provider: releases
+  api_key:
+    secure: kYBH5pGgfAMQq1Yei34SH8haQ+3EYkwL993S2ITtVCj8DlSxwZWQDYZmGJ0BIDYLo1FahD+LaA2jkxFBi5gDyjx6kMkqGfYDhuMH59CRZCSsxXOesB3dPdPd6R5sloLJFsAdsvS/G4bwwh2Wv5FaDGlbxKBJn9KUW84q4lcxvUg6v5SrOSG+lWLdISLKRRdQZqWmtDNVZXJZXLzL0m+P0DUdsG2bmqQT0lP0OFH0wpYLbosGkT7vd8zY7QOhbGN5ndEJ+f6dJSUC5HlxHTzKUaXjOaWjLfkopcDXjyYP8flx5OB7szMg/0xLvY4bDrra+N+sJisJ99CkUBiCs9DQ8qgGtD2K3PG9qlcZvJP9HVsXFFcBywdQfsLSXb2SVxj2Vw5pGoA7wmKBEqk/r48mUBt9UBCI87QLeJm5zhBiSIimvWkD3opCwUi4QSGs7AICuXrFKCVka5lj3c6X4ScpDFmT5upNAi6TV8UNC9Tmcly7vwPRU2BCm3F3SRkr+so+ARYhETCsKHn1TpYid76Ynz8uZUlDzm3aNdv3agIF/zp4rA+iv2Q+zco26vhpdyUVWTDx2EnD46/3ZRjCLgpiYoX7o/FAl0wJtEqyWJ5s55ng3ZhGSc19AcfunlYctfOQKB17dp5sFVlwPBzXmDnWkVg2YfLsYpHPrrE8dVElR5c=
+  file: myfile.txt
+  on:
+    repo: jindrapetrik/updatetest
+    tags: true

@@ -34,7 +34,7 @@ if [ "$DO_DEPLOY" = 1 ]; then
     FILE_NAME=`echo "$ITEM_JSON"|jq --raw-output '.file_name'`
     FILE_PATH=`echo "$ITEM_JSON"|jq --raw-output '.file_path'`
     
-    curl --silent --request POST --data-binary @$FILE_PATH --header "Content-Type: $CONTENT_TYPE" --header "Accept: application/vnd.github.manifold-preview" --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://uploads.github.com/repos/$GITHUB_REPO/releases/$RELEASE_ID/assets?name=$FILE_NAME
+    curl --silent --request POST --data-binary @$FILE_PATH --header "Content-Type: $CONTENT_TYPE" --header "Accept: application/vnd.github.manifold-preview" --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://uploads.github.com/repos/$GITHUB_REPO/releases/$RELEASE_ID/assets?name=$FILE_NAME>/dev/null
   done
         
   if [ -n "$DEPLOY_RELEASE_TO_REMOVE" ]; then

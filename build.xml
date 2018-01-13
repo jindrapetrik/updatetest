@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="uploadtest" basedir="." default="all">
+    <target name="all">
+        <echo message="Building..." />
+    </target>
+    <target name="new-version">
+        <echo message="Building new-version..." />
+    </target>
+</project>

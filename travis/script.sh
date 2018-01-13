@@ -51,23 +51,12 @@ else
           ESC_TAGGER_NAME=`echo $TAGGER_NAME|jq --raw-input --ascii-output '.'`        
           TAG_NAME=$NEXT_NIGHTLY_TAG
           VERSION_PRERELEASE=true
-          echo TAG_NAME=$TAG_NAME
                   
           #-create tag
-          echo "Creating tag..."
-          #git tag "$NEXT_NIGHTLY_TAG" $TAG_COMMIT_HASH
-          #git push --quiet myorigin :refs/tags/$NEXT_NIGHTLY_TAG > /dev/null 2>&1                            
+          echo "Creating tag $TAG_NAME..."
           echo '{"tag":"'$TAG_NAME'","message":"","object":"'$TAG_COMMIT_HASH'","type":"commit","tagger":{"name":'$ESC_TAGGER_NAME',"email":"'$TAGGER_EMAIL'","date":"'$CURRENT_DATE'"}}'>json.bin
-          cat json.bin 
-          curl --silent --request POST --data-binary @json.bin --header "Content-Type: application/json" --header "Accept: application/vnd.github.manifold-preview" --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://api.github.com/repos/$GITHUB_REPO/git/tags
-          #>/dev/null
-          
-          #-create release for that tag
-          #echo "Creating release..."
-          #echo '{"tag_name":"'$TAG_NAME'","target_commitish":"master","name":'$ESC_VERSION_NAME',"body":'$ESC_VERSION_DESCRIPTION',"draft":false,"prerelease":'$VERSION_PRERELEASE'}'>json.bin
-          #curl --silent --request POST --data-binary @json.bin  --header "Content-Type: application/json" --header "Accept: application/vnd.github.manifold-preview" --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://api.github.com/repos/$GITHUB_REPO/releases>/dev/null            
-          #echo "NIGHTLY RELEASED"
-          
+          curl --silent --request POST --data-binary @json.bin --header "Content-Type: application/json" --header "Accept: application/vnd.github.manifold-preview" --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://api.github.com/repos/$GITHUB_REPO/git/tags>/dev/null
+                    
           export DEPLOY_RELEASE_TO_REMOVE=$LAST_NIGHTLY_TAG                                 
           export DEPLOY_TAG_NAME=$NEXT_NIGHTLY_TAG
           export DEPLOY_VERSION_NAME="nightly $NEXT_NIGHTLY_VER"

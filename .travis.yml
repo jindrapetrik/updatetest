@@ -19,4 +19,4 @@ deploy:
   file: myfile.txt
   on:
     repo: jindrapetrik/updatetest
-    tags: true
+    condition: $DO_DEPLOY = 1

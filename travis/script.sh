@@ -13,6 +13,7 @@ else
     if [ -n "$TRAVIS_TAG" ]; then
       # release standard version based on tag
       echo "RELEASE standard version"
+      export DO_DEPLOY=1
     else
         #if we are on dev branch
         if [ $TRAVIS_BRANCH = "dev" ]; then    
@@ -69,6 +70,8 @@ else
           git tag -d $LAST_NIGHTLY_TAG
           git push --quiet myorigin :refs/tags/$LAST_NIGHTLY_TAG > /dev/null 2>&1
                 
+                
+          export DO_DEPLOY=1
           echo "FINISHED"
         fi
     fi

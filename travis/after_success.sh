@@ -14,12 +14,29 @@ if [ "$DO_DEPLOY" = 1 ]; then
   json=`curl --silent --request POST --data-binary @json.bin --header "Content-Type: application/json" --header "Accept: application/vnd.github.manifold-preview" --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://api.github.com/repos/$GITHUB_REPO/releases`
   RELEASE_ID=`echo "$json"|jq '.id'`
   
-  #attach files
-  UPLOAD_FILENAME=myfile.txt
-  UPLOAD_FILEPATH=$UPLOAD_FILENAME
-  UPLOAD_CONTENT_TYPE="text/plain"
-  curl --silent --request POST --data-binary @$UPLOAD_FILEPATH --header "Content-Type: $UPLOAD_CONTENT_TYPE" --header "Accept: application/vnd.github.manifold-preview" --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://uploads.github.com/repos/$GITHUB_REPO/releases/$RELEASE_ID/assets?name=$UPLOAD_FILENAME             
   
+  
+  #List of files to upload
+  DEPLOY_ATTACH_FILES_JSON='[
+{"file_name":"myfile.txt","file_path":"myfile.txt","content_type":"text/plain"},
+{"file_name":"smiley.png","file_path":"smiley.png","content_type":"image/png"}
+]';
+
+
+
+  #Attaching files...
+  NUM_FILES=`echo "$DEPLOY_ATTACH_FILES_JSON"|jq ".|length"`
+  
+  for (( i=0; i<$NUM_FILES; i++ ))
+  do              
+    ITEM_JSON=`echo "$DEPLOY_ATTACH_FILES_JSON"|jq '.['$i']'`                                  
+    CONTENT_TYPE=`echo "$ITEM_JSON"|jq --raw-output '.content_type'`
+    FILE_NAME=`echo "$ITEM_JSON"|jq --raw-output '.file_name'`
+    FILE_PATH=`echo "$ITEM_JSON"|jq --raw-output '.file_path'`
+    
+    curl --silent --request POST --data-binary @$FILE_PATH --header "Content-Type: $CONTENT_TYPE" --header "Accept: application/vnd.github.manifold-preview" --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://uploads.github.com/repos/$GITHUB_REPO/releases/$RELEASE_ID/assets?name=$FILE_NAME>/dev/null
+  done
+        
   if [ -n "$DEPLOY_RELEASE_TO_REMOVE" ]; then
     #Remove old nightly
     echo "Removing old release $DEPLOY_RELEASE_TO_REMOVE..."

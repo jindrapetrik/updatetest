@@ -13,6 +13,7 @@ notifications:
     - jindra.petrik@gmail.com
     on_success: change
     on_failure: always
+before_deploy: "./travis/before_deploy.sh"    
 deploy:
   provider: releases
   api_key:

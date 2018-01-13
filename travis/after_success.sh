@@ -2,7 +2,7 @@
 #stop on error
 set -e
 
-if [ $DO_DEPLOY = 1 ]; then
+if [ "$DO_DEPLOY" = 1 ]; then
   echo "Deploying..."
   GITHUB_REPO=$TRAVIS_REPO_SLUG
   

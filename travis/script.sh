@@ -21,7 +21,7 @@ else
         export DEPLOY_VERSION_NAME="version $VERSION_NUMBER"
         #and this:
         export DEPLOY_DESCRIPTION="version $VERSION_NUMBER description"
-        export DEPLOY_COMMITISH=$TRAVIS_BRANCH
+        export DEPLOY_COMMITISH="master"
         export DEPLOY_PRERELEASE=false
         export DO_DEPLOY=1            
       fi

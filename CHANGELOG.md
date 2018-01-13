@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+- something added
+- [#5465] something other
+
 ## [1.0.1] - 2016-12-24
 ### Added
 - [#123] First feature
@@ -27,3 +32,5 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - A fix
 - [#4564] B fix
+
+[1.0.1]: https://www.google.com

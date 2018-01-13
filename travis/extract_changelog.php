@@ -47,7 +47,7 @@ if($x===false){
 $x=substr($x,strpos($x,"\n")+1); //from start of the line
 
 //remove [] from issue names  [#1234] => #1234
-$x=preg_replace('/\[(#[0-9]+)\]/','$1',$x);
+$x=preg_replace('/\[(#[0-9]+)\]/','Issue $1',$x);
 
 echo $x;
 

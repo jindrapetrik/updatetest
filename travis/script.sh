@@ -13,14 +13,23 @@ else
     if [ -n "$TRAVIS_TAG" ]; then
       # release standard version based on tag
       echo "RELEASE standard version"
-      export DO_DEPLOY=1
+      export DEPLOY_TAG_NAME=$TRAVIS_TAG
+      #TODO: format this:
+      export DEPLOY_VERSION_NAME="version $TRAVIS_TAG"
+      #and this:
+      export DEPLOY_DESCRIPTION="version $TRAVIS_TAG description"
+      export DEPLOY_COMMITISH=$TRAVIS_BRANCH
+      export DEPLOY_PRERELEASE=false
+      export DO_DEPLOY=1            
     else
         #if we are on dev branch
         if [ $TRAVIS_BRANCH = "dev" ]; then    
           # create nightly build...
           
-          git config --global user.email "$TAGGER_EMAIL"
-          git config --global user.name "$TAGGER_NAME"
+          TAGGER_NAME="Travis CI"
+          TAGGER_EMAIL=travis@travis-ci.org          
+          git config --local user.email "$TAGGER_EMAIL"
+          git config --local user.name "$TAGGER_NAME"
           git remote add myorigin https://${GITHUB_ACCESS_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git > /dev/null 2>&1                    
                   
           TAG_COMMIT_HASH=$TRAVIS_COMMIT
@@ -32,8 +41,6 @@ else
           NEXT_NIGHTLY_TAG=nightly$NEXT_NIGHTLY_VER
           
           #Release new nightly
-          TAGGER_NAME="Travis CI"
-          TAGGER_EMAIL=travis@travis-ci.org
           VERSION_NAME="nightly $NEXT_NIGHTLY_VER"
           VERSION_DESCRIPTION="Nightly version $NEXT_NIGHTLY_VER with some changes"
           VERSION_PRERELEASE=true
@@ -48,8 +55,10 @@ else
                   
           #-create tag
           echo "Creating tag..."
-          #git tag "$NEXT_NIGHTLY_TAG" $TAG_COMMIT_HASH
-          #git push --quiet myorigin :refs/tags/$NEXT_NIGHTLY_TAG > /dev/null 2>&1
+          git tag "$NEXT_NIGHTLY_TAG" $TAG_COMMIT_HASH
+          git push --quiet myorigin :refs/tags/$NEXT_NIGHTLY_TAG > /dev/null 2>&1
+          
+          
           #TRAVIS_TAG=$TAG_NAME
           
           #echo '{"tag":"'$TAG_NAME'","message":"","object":"'$TAG_COMMIT_HASH'","type":"commit","tagger":{"name":'$ESC_TAGGER_NAME',"email":"'$TAGGER_EMAIL'","date":"'$CURRENT_DATE'"}}'>json.bin
@@ -60,20 +69,14 @@ else
           #curl --silent --request POST --data-binary @json.bin  --header "Content-Type: application/json" --header "Accept: application/vnd.github.manifold-preview" --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://api.github.com/repos/$GITHUB_REPO/releases>/dev/null            
           #echo "NIGHTLY RELEASED"
           
-          #Remove old nightly
-          echo "Removing old nightly..."
-          #-remove release
-          TAG_INFO=`curl --silent --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://api.github.com/repos/$GITHUB_REPO/releases/tags/$LAST_NIGHTLY_TAG`
-          RELEASE_ID=`echo $TAG_INFO|jq '.id'`
-          curl --silent --request DELETE --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://api.github.com/repos/$GITHUB_REPO/releases/$RELEASE_ID >/dev/null
-          #-delete tag
-          git tag -d $LAST_NIGHTLY_TAG
-          git push --quiet myorigin :refs/tags/$LAST_NIGHTLY_TAG > /dev/null 2>&1
-                
-                
-          export DO_DEPLOY=1
-          export DEPLOY_CREATE_TAG=$NEXT_NIGHTLY_TAG
-          echo "FINISHED"
+          export DEPLOY_RELEASE_TO_REMOVE=$LAST_NIGHTLY_TAG                                 
+          export DEPLOY_TAG_NAME=$NEXT_NIGHTLY_TAG
+          export DEPLOY_VERSION_NAME="nightly $NEXT_NIGHTLY_VER"
+          #TODO: format this:
+          export DEPLOY_DESCRIPTION="version $DEPLOY_VERSION_NAME description"
+          export DEPLOY_COMMITISH="dev"
+          export DEPLOY_PRERELEASE=true
+          export DO_DEPLOY=1                    
         fi
     fi
 fi

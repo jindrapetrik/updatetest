@@ -5,7 +5,6 @@ before_install:
 - sudo chmod a+x ./travis/*.sh
 - "./travis/before_install.sh"
 install: "./travis/install.sh"
-# source keyword is needed for DO_DEPLOY variable to propagate to condition below 
 script: "source ./travis/script.sh"
 notifications:
   email:
@@ -13,12 +12,4 @@ notifications:
     - jindra.petrik@gmail.com
     on_success: change
     on_failure: always
-before_deploy: "./travis/before_deploy.sh"    
-deploy:
-  provider: script
-  script: "source ./travis/deploy.sh"
-  skip_cleanup: true  
-  on:
-    repo: jindrapetrik/updatetest
-    all_branches: true
-    condition: $DO_DEPLOY = 1
+after_success: "source ./travis/after_success.sh"

@@ -11,16 +11,20 @@ if [ -z ${GITHUB_ACCESS_TOKEN+x} ]; then
 else
     # if tag set
     if [ -n "$TRAVIS_TAG" ]; then
-      # release standard version based on tag
-      echo "RELEASE standard version"
-      export DEPLOY_TAG_NAME=$TRAVIS_TAG
-      #TODO: format this:
-      export DEPLOY_VERSION_NAME="version $TRAVIS_TAG"
-      #and this:
-      export DEPLOY_DESCRIPTION="version $TRAVIS_TAG description"
-      export DEPLOY_COMMITISH=$TRAVIS_BRANCH
-      export DEPLOY_PRERELEASE=false
-      export DO_DEPLOY=1            
+      #tag starts with "version" prefix
+      if [[ $TRAVIS_TAG =~ ^version.* ]] ; then
+        VERSION_NUMBER=`echo $TRAVIS_TAG|sed 's/version//'`
+        # release standard version based on tag
+        echo "RELEASE standard version"
+        export DEPLOY_TAG_NAME=$TRAVIS_TAG
+        #TODO: format this:
+        export DEPLOY_VERSION_NAME="version $VERSION_NUMBER"
+        #and this:
+        export DEPLOY_DESCRIPTION="version $VERSION_NUMBER description"
+        export DEPLOY_COMMITISH=$TRAVIS_BRANCH
+        export DEPLOY_PRERELEASE=false
+        export DO_DEPLOY=1            
+      fi
     else
         #if we are on dev branch
         if [ $TRAVIS_BRANCH = "dev" ]; then    

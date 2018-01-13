@@ -46,8 +46,12 @@ if($x===false){
 }
 $x=substr($x,strpos($x,"\n")+1); //from start of the line
 
-//remove [] from issue names  [#1234] => #1234
+//remove [] from issue names  [#1234] => Issue #1234
 $x=preg_replace('/\[(#[0-9]+)\]/','Issue $1',$x);
+
+//remove markdown headers
+$x=preg_replace("/### ([^\n]+)\n/","$1:\n",$x);
+$x=str_replace("\n- ","\n",$x); 
 
 echo $x;
 

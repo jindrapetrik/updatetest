@@ -28,9 +28,6 @@ else
           
           TAGGER_NAME="Travis CI"
           TAGGER_EMAIL=travis@travis-ci.org          
-          git config --local user.email "$TAGGER_EMAIL"
-          git config --local user.name "$TAGGER_NAME"
-          git remote add myorigin https://${GITHUB_ACCESS_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git > /dev/null 2>&1                    
                   
           TAG_COMMIT_HASH=$TRAVIS_COMMIT
           GITHUB_REPO=$TRAVIS_REPO_SLUG

@@ -17,11 +17,9 @@ else
         # release standard version based on tag
         echo "RELEASE standard version"
         export DEPLOY_TAG_NAME=$TRAVIS_TAG
-        #TODO: format this:
         export DEPLOY_VERSION_NAME="version $VERSION_NUMBER"
-        #and this:
-        export DEPLOY_DESCRIPTION="version $VERSION_NUMBER description"
-        export DEPLOY_COMMITISH=$TRAVIS_BRANCH
+        export DEPLOY_DESCRIPTION=`php ./travis/extract_changelog.php $VERSION_NUMBER`
+        export DEPLOY_COMMITISH="master"
         export DEPLOY_PRERELEASE=false
         export DO_DEPLOY=1            
       fi
@@ -47,8 +45,6 @@ else
           VERSION_PRERELEASE=true
           CURRENT_DATE=`date +%Y-%m-%dT%H:%M:%SZ`
   
-          ESC_VERSION_NAME=`echo $VERSION_NAME|jq --raw-input --ascii-output '.'`
-          ESC_VERSION_DESCRIPTION=`echo $VERSION_DESCRIPTION|jq --raw-input --ascii-output '.'`
           ESC_TAGGER_NAME=`echo $TAGGER_NAME|jq --raw-input --ascii-output '.'`        
           TAG_NAME=$NEXT_NIGHTLY_TAG
           VERSION_PRERELEASE=true
@@ -61,8 +57,7 @@ else
           export DEPLOY_RELEASE_TO_REMOVE=$LAST_NIGHTLY_TAG                                 
           export DEPLOY_TAG_NAME=$NEXT_NIGHTLY_TAG
           export DEPLOY_VERSION_NAME="nightly $NEXT_NIGHTLY_VER"
-          #TODO: format this:
-          export DEPLOY_DESCRIPTION="version $DEPLOY_VERSION_NAME description"
+          export DEPLOY_DESCRIPTION=`php ./travis/extract_changelog.php Unreleased`
           export DEPLOY_COMMITISH="dev"
           export DEPLOY_PRERELEASE=true
           export DO_DEPLOY=1                    

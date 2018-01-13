@@ -47,7 +47,7 @@ else
                   
           #-create tag
           echo "Creating tag..."
-          git tag "$NEXT_NIGHTLY_TAG"
+          git tag "$NEXT_NIGHTLY_TAG" $TAG_COMMIT_HASH
           git push --quiet myorigin :refs/tags/$NEXT_NIGHTLY_TAG > /dev/null 2>&1
           #TRAVIS_TAG=$TAG_NAME
           

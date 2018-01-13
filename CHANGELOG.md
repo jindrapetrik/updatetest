@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - [#5465] something other
 - a new feature
 - second feature
+- something cool
 
 ## [1.0.4] - 2016-08-12
 ### Added

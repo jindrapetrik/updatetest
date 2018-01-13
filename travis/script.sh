@@ -46,8 +46,8 @@ else
         ant all            
       fi
     else
-        #if we are on dev branch
-        if [ $TRAVIS_BRANCH = "dev" ]; then    
+        #if we are on dev branch and it's not a pull request
+        if [ $TRAVIS_BRANCH = "dev" && $TRAVIS_PULL_REQUEST = "false" ]; then    
           # create nightly build...
           
           TAGGER_NAME="Travis CI"
@@ -98,7 +98,10 @@ else
           export DEPLOY_DESCRIPTION=`php ./travis/extract_changelog.php Unreleased`
           export DEPLOY_COMMITISH="dev"
           export DEPLOY_PRERELEASE=true
-          export DO_DEPLOY=1                    
+          export DO_DEPLOY=1
+        else
+          # regular build
+          ant all                                       
         fi
     fi
 fi

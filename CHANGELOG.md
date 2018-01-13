@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 - something added
 - [#5465] something other
 - a new feature
+- second feature
 
 ## [1.0.4] - 2016-08-12
 ### Added

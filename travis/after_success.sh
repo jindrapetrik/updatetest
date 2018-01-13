@@ -18,7 +18,7 @@ if [ $DO_DEPLOY = 1 ]; then
   
   if [ -n "$DEPLOY_RELEASE_TO_REMOVE" ]; then
     #Remove old nightly
-    echo "Removing old release..."
+    echo "Removing old release $DEPLOY_RELEASE_TO_REMOVE..."
     #-remove release
     TAG_INFO=`curl --silent --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://api.github.com/repos/$GITHUB_REPO/releases/tags/$DEPLOY_RELEASE_TO_REMOVE`
     echo $TAG_INFO
@@ -29,9 +29,13 @@ if [ $DO_DEPLOY = 1 ]; then
     echo C
     git config --local user.email "travis@travis-ci.org"
     git config --local user.name "Travis CI"
-    git remote add myorigin https://${GITHUB_ACCESS_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git > /dev/null 2>&1                                            
+    echo D
+    git remote add myorigin https://${GITHUB_ACCESS_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git > /dev/null 2>&1
+    echo E                                            
     git tag -d $DEPLOY_RELEASE_TO_REMOVE
+    echo F
     git push --quiet myorigin :refs/tags/$DEPLOY_RELEASE_TO_REMOVE > /dev/null 2>&1
+    echo G
   fi  
 fi
          

@@ -17,6 +17,10 @@ else
         #if we are on dev branch
         if [ $TRAVIS_BRANCH = "dev" ]; then    
           # create nightly build...
+          
+          git config --global user.email "$TAGGER_EMAIL"
+          git config --global user.name "$TAGGER_NAME"
+          git remote add myorigin https://${GITHUB_ACCESS_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git > /dev/null 2>&1                    
                   
           TAG_COMMIT_HASH=$TRAVIS_COMMIT
           GITHUB_REPO=$TRAVIS_REPO_SLUG
@@ -43,8 +47,12 @@ else
                   
           #-create tag
           echo "Creating tag..."
-          echo '{"tag":"'$TAG_NAME'","message":"","object":"'$TAG_COMMIT_HASH'","type":"commit","tagger":{"name":'$ESC_TAGGER_NAME',"email":"'$TAGGER_EMAIL'","date":"'$CURRENT_DATE'"}}'>json.bin
-          curl --silent --request POST --data-binary @json.bin --header "Content-Type: application/json" --header "Accept: application/vnd.github.manifold-preview" --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://api.github.com/repos/$GITHUB_REPO/git/tags>/dev/null
+          git tag "$NEXT_NIGHTLY_TAG"
+          git push --quiet myorigin :refs/tags/$NEXT_NIGHTLY_TAG > /dev/null 2>&1
+          #TRAVIS_TAG=$TAG_NAME
+          
+          #echo '{"tag":"'$TAG_NAME'","message":"","object":"'$TAG_COMMIT_HASH'","type":"commit","tagger":{"name":'$ESC_TAGGER_NAME',"email":"'$TAGGER_EMAIL'","date":"'$CURRENT_DATE'"}}'>json.bin
+          #curl --silent --request POST --data-binary @json.bin --header "Content-Type: application/json" --header "Accept: application/vnd.github.manifold-preview" --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://api.github.com/repos/$GITHUB_REPO/git/tags>/dev/null
           #-create release for that tag
           echo "Creating release..."
           echo '{"tag_name":"'$TAG_NAME'","target_commitish":"master","name":'$ESC_VERSION_NAME',"body":'$ESC_VERSION_DESCRIPTION',"draft":false,"prerelease":'$VERSION_PRERELEASE'}'>json.bin
@@ -58,15 +66,9 @@ else
           RELEASE_ID=`echo $TAG_INFO|jq '.id'`
           curl --silent --request DELETE --user $GITHUB_USER:$GITHUB_ACCESS_TOKEN https://api.github.com/repos/$GITHUB_REPO/releases/$RELEASE_ID >/dev/null
           #-delete tag
-          git config --global user.email "$TAGGER_EMAIL"
-          git config --global user.name "$TAGGER_NAME"
           git tag -d $LAST_NIGHTLY_TAG
-          git remote add myorigin https://${GITHUB_ACCESS_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git > /dev/null 2>&1
           git push --quiet myorigin :refs/tags/$LAST_NIGHTLY_TAG > /dev/null 2>&1
-      
-          
-          #set travis tag for deploying
-          TRAVIS_TAG=$TAG_NAME
+                
           echo "FINISHED"
         fi
     fi

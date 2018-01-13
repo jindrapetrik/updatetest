@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 - something added
 - [#5465] something other
 
-## [1.0.3] - 2016-08-12
+## [1.0.4] - 2016-08-12
+### Added
 - [#123] A feature
 - B feature
 - [#456] C feature 

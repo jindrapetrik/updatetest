@@ -45,8 +45,6 @@ else
           VERSION_PRERELEASE=true
           CURRENT_DATE=`date +%Y-%m-%dT%H:%M:%SZ`
   
-          ESC_VERSION_NAME=`echo $VERSION_NAME|jq --raw-input --ascii-output '.'`
-          ESC_VERSION_DESCRIPTION=`echo $VERSION_DESCRIPTION|jq --raw-input --ascii-output '.'`
           ESC_TAGGER_NAME=`echo $TAGGER_NAME|jq --raw-input --ascii-output '.'`        
           TAG_NAME=$NEXT_NIGHTLY_TAG
           VERSION_PRERELEASE=true
